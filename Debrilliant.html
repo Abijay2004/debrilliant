@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="De Brilliant Digital Hub - Empowering De-Brilliant House Academy with digital learning and communication"
+    />
+    <meta name="author" content="Student Devs" />
+    <meta property="og:title" content="The Brilliant Digital Hub" />
+    <meta
+      property="og:description"
+      content="Transforming De-Brilliant House Academy with Digital Excellence"
+    />
+    <meta
+      property="og:image"
+      content="https://your-site.com/debrilliantlogo.jpg"
+    />
+    <!-- Update with actual URL -->
+    <title>The Brilliant Digital Hub</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      :root {
+        --primary-green: #27ae60;
+        --secondary-green: #2ecc71;
+        --bg-light: #f4f7f6;
+        --text-dark: #333;
+        --text-light: #ffffff;
+        --accent: #e8f5e9;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Helvetica", sans-serif;
+        background: var(--bg-light);
+        color: var(--text-dark);
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+      }
+      /* Dark mode */
+      body.dark-mode {
+        --bg-light: #121212;
+        --text-dark: #e0e0e0;
+        --accent: #1e1e1e;
+      }
+      .sidebar {
+        width: 70px;
+        background: linear-gradient(
+          180deg,
+          var(--primary-green),
+          var(--secondary-green)
+        );
+        color: var(--text-light);
+        position: fixed;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        transition: width 0.3s ease, transform 0.3s ease;
+        z-index: 1000;
+      }
+      .sidebar:hover {
+        width: 200px;
+      }
+      .sidebar.sidebar-open {
+        width: 200px;
+      }
+      .sidebar .logo {
+        max-width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 30px;
+        transition: max-width 0.3s ease, height 0.3s ease;
+      }
+      .sidebar:hover .logo,
+      .sidebar.sidebar-open .logo {
+        max-width: 100px;
+        height: 100px;
+      }
+      .nav-item {
+        width: 100%;
+        padding: 15px 0;
+        text-align: center;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        position: relative;
+        color: var(--text-light);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .nav-item:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-item i {
+        margin-right: 10px;
+        transition: transform 0.3s ease;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .nav-item i,
+        .academy-name span {
+          transition: none;
+          animation: none;
+        }
+      }
+      .nav-item:hover i,
+      .nav-item:active i {
+        animation: pulse 0.5s ease-out;
+      }
+      .sidebar:hover .nav-item span,
+      .sidebar.sidebar-open .nav-item span {
+        display: inline;
+      }
+      .nav-item span {
+        display: none;
+      }
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      .main-content {
+        margin-left: 70px;
+        flex-grow: 1;
+        padding: 20px;
+        transition: margin-left 0.3s ease;
+      }
+      .sidebar:hover ~ .main-content,
+      .sidebar.sidebar-open ~ .main-content {
+        margin-left: 200px;
+      }
+      .hero {
+        height: 400px;
+        background: url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80")
+          no-repeat center center;
+        background-size: cover;
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(39, 174, 96, 0.6);
+        z-index: 1;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding: 0 20px;
+        color: var(--text-light);
+        flex-grow: 1;
+      }
+      .hero-content h1 {
+        font-size: 3em;
+        font-weight: 700;
+        margin: 0 0 10px;
+      }
+      .hero-content p {
+        font-size: 1.2em;
+        margin: 0;
+      }
+      .hero .btn {
+        margin-top: 20px;
+        background: var(--text-light);
+        color: var(--primary-green);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: 600;
+      }
+      .hero .btn:hover {
+        background: var(--accent);
+      }
+      .academy-name {
+        position: absolute;
+        z-index: 2;
+        font-size: 1.8em;
+        font-weight: 700;
+        color: var(--text-light);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        padding: 10px 20px;
+        background: rgba(39, 174, 96, 0.5);
+        border-radius: 10px 0 0 10px;
+        right: 0;
+        top: 10px;
+        width: 300px;
+        overflow: hidden;
+        white-space: nowrap;
+        box-sizing: border-box;
+      }
+      .academy-name span {
+        display: inline-block;
+        animation: slideRightToLeft 20s linear infinite;
+      }
+      @keyframes slideRightToLeft {
+        0% {
+          transform: translateX(100%);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+      }
+      .section {
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      body.dark-mode .section {
+        background: var(--accent);
+      }
+      .section h2 {
+        font-size: 1.8em;
+        color: var(--primary-green);
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .section-content {
+        display: none;
+        padding: 10px 0;
+      }
+      .section.active .section-content {
+        display: block;
+      }
+      .section-btn {
+        background: none;
+        border: none;
+        color: var(--primary-green);
+        font-size: 1em;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+      .section-btn:hover {
+        background: var(--accent);
+      }
+      footer {
+        text-align: center;
+        padding: 10px;
+        background: var(--primary-green);
+        color: var(--text-light);
+        width: 100%;
+        margin-top: auto;
+      }
+      footer p {
+        margin: 0;
+        font-size: 0.9em;
+      }
+      footer a {
+        color: var(--text-light);
+        text-decoration: none;
+        margin: 0 10px;
+      }
+      footer a:hover {
+        text-decoration: underline;
+      }
+      @keyframes slideUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      .hero-content,
+      .section {
+        animation: slideUp 0.8s ease-out;
+      }
+      .mobile-menu-icon {
+        display: none;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        font-size: 24px;
+        color: var(--primary-green);
+        cursor: pointer;
+        z-index: 1001;
+        transition: transform 0.3s ease;
+      }
+      .theme-toggle {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: var(--primary-green);
+        cursor: pointer;
+        z-index: 1001;
+      }
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1002;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+      .modal-content {
+        background: var(--bg-light);
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+      }
+      .close {
+        color: var(--text-dark);
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      /* Media Query for Mobile */
+      @media (max-width: 768px) {
+        .mobile-menu-icon {
+          display: block;
+        }
+        .sidebar {
+          width: 200px;
+          transform: translateX(-200px);
+        }
+        .sidebar.sidebar-open {
+          transform: translateX(0);
+        }
+        .sidebar:hover {
+          width: 200px;
+        }
+        .sidebar:hover .logo {
+          max-width: 100px;
+          height: 100px;
+        }
+        .sidebar:hover .nav-item span {
+          display: inline;
+        }
+        .sidebar:hover ~ .main-content {
+          margin-left: 0;
+        }
+        .main-content {
+          margin-left: 0;
+          padding: 15px;
+        }
+        .hero {
+          height: 250px;
+        }
+        .hero-content h1 {
+          font-size: 1.8em;
+        }
+        .hero-content p {
+          font-size: 0.9em;
+        }
+        .hero .btn {
+          padding: 8px 16px;
+          font-size: 0.9em;
+        }
+        .academy-name {
+          font-size: 1.2em;
+          top: 5px;
+          right: 5px;
+          width: 200px;
+        }
+        .section h2 {
+          font-size: 1.4em;
+        }
+        .section {
+          padding: 15px;
+        }
+      }
+      /* High Contrast Improvements */
+      @media (prefers-contrast: more) {
+        body {
+          background: #fff;
+          color: #000;
+        }
+        .sidebar {
+          background: #000;
+          color: #fff;
+        }
+        .hero::before {
+          background: rgba(0, 0, 0, 0.6);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar" role="navigation" aria-label="Main Navigation">
+      <img
+        src="debrilliantlogo.jpg"
+        alt="The Brilliant Digital Hub Logo - A symbol of digital education excellence"
+        class="logo"
+        loading="lazy"
+      />
+      <div
+        class="nav-item"
+        id="homeBtn"
+        role="button"
+        tabindex="0"
+        aria-label="Home"
+      >
+        <i class="fas fa-home"></i><span>Home</span>
+      </div>
+      <a
+        href="parent_dashboard.html"
+        class="nav-item"
+        aria-label="Parent Portal"
+      >
+        <i class="fas fa-users"></i><span>Parent Portal</span>
+      </a>
+      <a href="quizzes.html" class="nav-item" aria-label="Quizzes">
+        <i class="fas fa-pencil-alt"></i><span>Quizzes</span>
+      </a>
+      <a href="homework.html" class="nav-item" aria-label="Homework">
+        <i class="fas fa-book"></i><span>Homework</span>
+      </a>
+    </div>
+
+    <div class="main-content">
+      <div class="mobile-menu-icon" role="button" aria-label="Toggle Menu">
+        <i class="fas fa-bars"></i>
+      </div>
+      <button class="theme-toggle" aria-label="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+      </button>
+
+      <div class="hero">
+        <div class="hero-content">
+          <h1>De-Brilliant Digital Hub</h1>
+          <p>Transforming De-Brilliant House Academy with Digital Excellence</p>
+          <button class="btn" id="getStartedBtn">Get Started</button>
+        </div>
+        <div class="academy-name">
+          <span>De-Brilliant House Academy</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>
+          Parent Portal
+          <button
+            class="section-btn"
+            onclick="toggleSection(this)"
+            aria-expanded="false"
+            aria-controls="parent-portal-content"
+          >
+            ▼
+          </button>
+        </h2>
+        <div class="section-content" id="parent-portal-content">
+          <p>Access personalized reports and updates for your child.</p>
+          <a href="parent_dashboard.html" class="btn btn-success"
+            >Enter Portal</a
+          >
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>
+          Online Quizzes
+          <button
+            class="section-btn"
+            onclick="toggleSection(this)"
+            aria-expanded="false"
+            aria-controls="quizzes-content"
+          >
+            ▼
+          </button>
+        </h2>
+        <div class="section-content" id="quizzes-content">
+          <p>Take timed quizzes and view your scores instantly.</p>
+          <a href="quizzes.html" class="btn btn-success">Start Now</a>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>
+          Homework Portal
+          <button
+            class="section-btn"
+            onclick="toggleSection(this)"
+            aria-expanded="false"
+            aria-controls="homework-content"
+          >
+            ▼
+          </button>
+        </h2>
+        <div class="section-content" id="homework-content">
+          <p>Submit assignments and receive feedback from tutors.</p>
+          <a href="homework.html" class="btn btn-success">Submit Homework</a>
+        </div>
+      </div>
+    </div>
+
+    <footer role="contentinfo">
+      <p>© 2025 The Brilliant Digital Hub | Developed by Student Devs</p>
+      <div>
+        <a href="https://twitter.com/debrilliant" aria-label="Twitter"
+          ><i class="fab fa-twitter"></i
+        ></a>
+        <a href="https://facebook.com/debrilliant" aria-label="Facebook"
+          ><i class="fab fa-facebook"></i
+        ></a>
+        <a href="mailto:info@debrilliant.com" aria-label="Email">Contact Us</a>
+      </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="exploreModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Explore features coming soon!</p>
+      </div>
+    </div>
+
+    <script>
+      function toggleSection(button) {
+        const section = button.parentElement.parentElement;
+        const isActive = section.classList.toggle("active");
+        button.textContent = isActive ? "▲" : "▼";
+        button.setAttribute("aria-expanded", isActive);
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const homeBtn = document.getElementById("homeBtn");
+        const mobileMenuIcon = document.querySelector(".mobile-menu-icon");
+        const sidebar = document.querySelector(".sidebar");
+        const themeToggle = document.querySelector(".theme-toggle");
+        const getStartedBtn = document.getElementById("getStartedBtn");
+        const modal = document.getElementById("exploreModal");
+        const closeBtn = document.querySelector(".close");
+
+        if (homeBtn) {
+          homeBtn.addEventListener("click", () => {
+            window.location.href = "Debrilliant.html";
+          });
+          homeBtn.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") homeBtn.click();
+          });
+        }
+
+        if (mobileMenuIcon) {
+          mobileMenuIcon.addEventListener("click", () => {
+            sidebar.classList.toggle("sidebar-open");
+          });
+        }
+
+        // Auto-close sidebar on outside click (mobile)
+        document.addEventListener("click", (e) => {
+          if (
+            window.innerWidth <= 768 &&
+            sidebar.classList.contains("sidebar-open") &&
+            !sidebar.contains(e.target) &&
+            !mobileMenuIcon.contains(e.target)
+          ) {
+            sidebar.classList.remove("sidebar-open");
+          }
+        });
+
+        const navLinks = document.querySelectorAll(
+          ".sidebar a, .sidebar .nav-item"
+        );
+        navLinks.forEach((link) => {
+          link.addEventListener("click", () => {
+            if (window.innerWidth <= 768) {
+              sidebar.classList.remove("sidebar-open");
+            }
+          });
+        });
+
+        // Dark mode toggle
+        if (themeToggle) {
+          themeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            const icon = themeToggle.querySelector("i");
+            icon.classList.toggle("fa-moon");
+            icon.classList.toggle("fa-sun");
+          });
+        }
+
+        // Modal functionality
+        if (getStartedBtn && modal && closeBtn) {
+          getStartedBtn.addEventListener("click", () => {
+            modal.style.display = "flex";
+          });
+          closeBtn.addEventListener("click", () => {
+            modal.style.display = "none";
+          });
+          window.addEventListener("click", (e) => {
+            if (e.target === modal) modal.style.display = "none";
+          });
+        }
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

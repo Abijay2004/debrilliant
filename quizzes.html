@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="The Brilliant Digital Hub - Online Quizzes for De-Brilliant House Academy"
+    />
+    <meta name="author" content="Student Devs" />
+    <title>De Brilliant Digital Hub - Online Quizzes</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Helvetica", sans-serif;
+        background: #f4f7f6;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+      }
+      .sidebar {
+        width: 70px;
+        background: linear-gradient(180deg, #27ae60, #2ecc71);
+        color: #ffffff;
+        position: fixed;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        transition: width 0.3s ease, transform 0.3s ease;
+        z-index: 1000;
+      }
+      .sidebar:hover {
+        width: 200px;
+      }
+      .sidebar.sidebar-open {
+        width: 200px;
+      }
+      .sidebar .logo {
+        max-width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 30px;
+        transition: max-width 0.3s ease, height 0.3s ease;
+      }
+      .sidebar:hover .logo,
+      .sidebar.sidebar-open .logo {
+        max-width: 100px;
+        height: 100px;
+      }
+      .nav-item {
+        width: 100%;
+        padding: 15px 0;
+        text-align: center;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        color: #ffffff;
+        text-decoration: none;
+        display: block;
+      }
+      .nav-item:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-item i {
+        transition: transform 0.3s ease;
+      }
+      .nav-item:hover i,
+      .nav-item:active i {
+        animation: pulse 0.5s ease-out;
+      }
+      @media (hover: none) {
+        .nav-item:active i {
+          animation: pulse 0.5s ease-out;
+        }
+      }
+      .sidebar:hover .nav-item span,
+      .sidebar.sidebar-open .nav-item span {
+        display: inline;
+      }
+      .nav-item span {
+        display: none;
+        vertical-align: middle;
+        margin-left: 10px;
+      }
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      .main-content {
+        margin-left: 70px;
+        flex-grow: 1;
+        padding: 20px;
+        transition: margin-left 0.3s ease;
+      }
+      .sidebar:hover ~ .main-content,
+      .sidebar.sidebar-open ~ .main-content {
+        margin-left: 200px;
+      }
+      .hero {
+        height: 400px;
+        background: url("https://media.istockphoto.com/id/1411084277/photo/quiz-time-concept.jpg?s=612x612&w=0&k=20&c=c8qeMkhHWa6B2wF64WSCcBAHtjp9fXVxaOMFYvAUroQ=")
+          no-repeat center center;
+        background-size: cover;
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(39, 174, 96, 0.6);
+        z-index: 1;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: #ffffff;
+        padding: 20px;
+      }
+      .hero-content h1 {
+        font-size: 3em;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      .hero-content p {
+        font-size: 1.2em;
+        margin-bottom: 20px;
+      }
+      .hero .btn {
+        background: #ffffff;
+        color: #27ae60;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .hero .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+      .academy-name {
+        position: absolute;
+        z-index: 2;
+        font-size: 1.5em;
+        font-weight: 700;
+        color: #ffffff;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        padding: 10px 20px;
+        background: rgba(39, 174, 95, 0.301);
+        border-radius: 10px 0 0 10px;
+        right: 0;
+        top: 10px;
+        width: 200px;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .academy-name span {
+        display: inline-block;
+        animation: marquee 10s linear infinite;
+      }
+      @keyframes marquee {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-100%);
+        }
+      }
+      .login-page,
+      .quiz-section {
+        display: none;
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .login-page.active,
+      .quiz-section.active {
+        display: block;
+      }
+      .login-page h2,
+      .quiz-section h2 {
+        color: #27ae60;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+        border-bottom: 2px solid #27ae60;
+        padding-bottom: 5px;
+      }
+      .login-form input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1em;
+        transition: border-color 0.3s ease;
+      }
+      .login-form input:focus {
+        border-color: #27ae60;
+        outline: none;
+      }
+      .login-form button {
+        background: #27ae60;
+        color: #ffffff;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+      .login-form button:hover {
+        background: #219653;
+      }
+      .quiz-question {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 5px;
+        border-left: 4px solid #27ae60;
+        position: relative;
+      }
+      .quiz-progress {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 10px;
+      }
+      .quiz-options label {
+        display: block;
+        margin: 8px 0;
+        font-size: 1em;
+        cursor: pointer;
+      }
+      .quiz-options input[type="radio"] {
+        margin-right: 10px;
+      }
+      #timer {
+        font-size: 1.2em;
+        color: #ff4444;
+        margin-bottom: 20px;
+        font-weight: 600;
+      }
+      #submitQuiz {
+        background: #27ae60;
+        color: #ffffff;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+      #submitQuiz:hover {
+        background: #219653;
+      }
+      #submitQuiz:disabled {
+        background: #cccccc;
+        cursor: not-allowed;
+      }
+      #score {
+        font-size: 1.5em;
+        color: #27ae60;
+        margin-top: 20px;
+        padding: 15px;
+        background: #e8f5e9;
+        border-radius: 5px;
+        font-weight: 600;
+        text-align: center;
+      }
+      .mobile-menu-icon {
+        display: none;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        font-size: 24px;
+        color: #27ae60;
+        cursor: pointer;
+        z-index: 1001;
+        transition: transform 0.3s ease;
+      }
+      footer {
+        text-align: center;
+        padding: 10px;
+        background: #27ae60;
+        color: #ffffff;
+        width: 100%;
+      }
+      footer p {
+        margin: 0;
+        font-size: 0.9em;
+      }
+      @media (max-width: 768px) {
+        .mobile-menu-icon {
+          display: block;
+        }
+        .sidebar {
+          width: 200px;
+          transform: translateX(-200px);
+        }
+        .sidebar.sidebar-open {
+          transform: translateX(0);
+        }
+        .sidebar:hover {
+          width: 200px;
+        }
+        .sidebar:hover .logo {
+          max-width: 50px;
+          height: 50px;
+        }
+        .sidebar:hover .nav-item span {
+          display: none;
+        }
+        .sidebar:hover ~ .main-content {
+          margin-left: 0;
+        }
+        .main-content {
+          margin-left: 0;
+          margin-right: 0;
+          padding: 15px;
+        }
+        .sidebar.sidebar-open ~ .main-content .mobile-menu-icon {
+          transform: translateX(200px);
+        }
+        .hero {
+          height: 250px;
+        }
+        .hero-content h1 {
+          font-size: 1.8em;
+        }
+        .hero-content p {
+          font-size: 0.9em;
+        }
+        .hero .btn {
+          padding: 8px 16px;
+          font-size: 0.9em;
+        }
+        .academy-name {
+          font-size: 1.2em;
+          top: 5px;
+          right: 5px;
+          width: 200px;
+          padding: 10px 20px;
+        }
+        .login-page,
+        .quiz-section {
+          padding: 15px;
+        }
+        .login-page h2,
+        .quiz-section h2 {
+          font-size: 1.4em;
+        }
+        .login-form input {
+          padding: 8px;
+          font-size: 0.9em;
+        }
+        .login-form button {
+          padding: 8px 16px;
+          font-size: 0.9em;
+        }
+        .quiz-question {
+          padding: 10px;
+          font-size: 0.9em;
+        }
+        .quiz-progress {
+          font-size: 0.8em;
+        }
+        #timer {
+          font-size: 1em;
+        }
+        #submitQuiz {
+          padding: 8px 16px;
+          font-size: 0.9em;
+        }
+        #score {
+          font-size: 1.2em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <img
+        src="debrilliantlogo.jpg"
+        alt="The Brilliant Digital Hub Logo"
+        class="logo"
+      />
+      <div class="nav-item" id="homeBtn">
+        <i class="fas fa-home"></i><span>Home</span>
+      </div>
+      <a href="parent_dashboard.html" class="nav-item">
+        <i class="fas fa-users"></i><span>Parent Portal</span>
+      </a>
+      <a href="quizzes.html" class="nav-item">
+        <i class="fas fa-pencil-alt"></i><span>Quizzes</span>
+      </a>
+      <a href="homework.html" class="nav-item">
+        <i class="fas fa-book"></i><span>Homework</span>
+      </a>
+    </div>
+
+    <div class="main-content">
+      <div class="mobile-menu-icon">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="hero">
+        <div class="hero-content">
+          <h1>De-Brilliant Online Quizzes</h1>
+          <p>Challenge Yourself with Interactive Learning</p>
+          <button class="btn" onclick="showLogin()">Start Quiz</button>
+        </div>
+        <div class="academy-name">
+          <span>De-Brilliant House Academy</span>
+        </div>
+      </div>
+
+      <div class="login-page">
+        <h2>Student Login</h2>
+        <div class="login-form">
+          <input
+            type="text"
+            id="studentId"
+            placeholder="Enter Your StudentID"
+          />
+          <button onclick="startQuiz()">Login</button>
+        </div>
+      </div>
+
+      <div class="quiz-section" id="quizSection" style="display: none">
+        <h2>Quiz Time for <span id="studentName"></span></h2>
+        <div id="timer">Time Left: 60 seconds</div>
+        <div id="quizProgress" class="quiz-progress">
+          Progress: 1 of <span id="totalQuestions">0</span>
+        </div>
+        <div id="quizQuestions"></div>
+        <button id="submitQuiz" onclick="submitQuiz()">Submit Quiz</button>
+        <div id="score"></div>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2025 De-Brilliant Digital Hub | Developed by Student Devs</p>
+    </footer>
+
+    <script>
+      let timeLeft = 60;
+      let questions = [];
+      let studentId = "";
+      let studentName = "";
+      let data = {};
+
+      const airtableApiKey =
+        "patK7axuDcDsFdl2J.24ad2395a3c844c558db8366db1904dd5e7ba19c76c680dffb4316527b815795";
+      const baseId = "appBepyfshlTPkfo0";
+      const endpointUrl = `https://api.airtable.com/v0/${baseId}/Quizzes`;
+
+      function showLogin() {
+        document.querySelector(".login-page").classList.add("active");
+        document.querySelector(".hero").style.display = "none";
+      }
+
+      function startQuiz() {
+        studentId = document.getElementById("studentId").value.trim();
+        if (studentId) {
+          document.querySelector(".login-page").classList.remove("active");
+          document.getElementById("quizSection").style.display = "block";
+          fetchStudentData();
+          startTimer();
+        } else {
+          alert("Please enter a valid StudentID.");
+        }
+      }
+
+      function startTimer() {
+        const timer = document.getElementById("timer");
+        const timerInterval = setInterval(() => {
+          timeLeft--;
+          timer.textContent = `Time Left: ${timeLeft} seconds`;
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            submitQuiz();
+          }
+        }, 1000);
+      }
+
+      function fetchStudentData() {
+        fetch(`${endpointUrl}?filterByFormula=StudentID='${studentId}'`, {
+          headers: { Authorization: `Bearer ${airtableApiKey}` },
+        })
+          .then((response) => {
+            if (!response.ok)
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            return response.json();
+          })
+          .then((dataResponse) => {
+            data = dataResponse;
+            if (data.records.length > 0) {
+              const record = data.records[0];
+              studentName = record.fields["Student Name"] || "Unknown";
+              document.getElementById("studentName").textContent = studentName;
+              let questionsArray = record.fields["Questions"];
+              if (!Array.isArray(questionsArray)) {
+                questionsArray = questionsArray
+                  ? questionsArray.split("\n").filter((q) => q.trim())
+                  : [];
+              }
+              const option1Array = Array.isArray(record.fields["Option 1"])
+                ? record.fields["Option 1"]
+                : (record.fields["Option 1"] || "")
+                    .split("\n")
+                    .filter((o) => o.trim());
+              const option2Array = Array.isArray(record.fields["Option 2"])
+                ? record.fields["Option 2"]
+                : (record.fields["Option 2"] || "")
+                    .split("\n")
+                    .filter((o) => o.trim());
+              const option3Array = Array.isArray(record.fields["Option 3"])
+                ? record.fields["Option 3"]
+                : (record.fields["Option 3"] || "")
+                    .split("\n")
+                    .filter((o) => o.trim());
+              const option4Array = Array.isArray(record.fields["Option 4"])
+                ? record.fields["Option 4"]
+                : (record.fields["Option 4"] || "")
+                    .split("\n")
+                    .filter((o) => o.trim());
+              const correctAnswersArray = Array.isArray(
+                record.fields["Correct Answer"]
+              )
+                ? record.fields["Correct Answer"]
+                : (record.fields["Correct Answer"] || "")
+                    .split("\n")
+                    .filter((a) => a.trim());
+
+              const maxLength = Math.min(
+                questionsArray.length,
+                option1Array.length,
+                option2Array.length,
+                option3Array.length,
+                option4Array.length,
+                correctAnswersArray.length
+              );
+              questions = Array.from({ length: maxLength }, (_, i) => ({
+                question: questionsArray[i] || `Question ${i + 1}`,
+                options: [
+                  option1Array[i] || "",
+                  option2Array[i] || "",
+                  option3Array[i] || "",
+                  option4Array[i] || "",
+                ],
+                correctAnswer: correctAnswersArray[i] || "N/A",
+              })).filter((q) => q.question && q.options.some((o) => o));
+              document.getElementById("totalQuestions").textContent =
+                questions.length;
+              console.log("Fetched Questions:", questions);
+              if (questions.length === 0) {
+                document.getElementById("quizQuestions").innerHTML =
+                  "<p>No questions available.</p>";
+              } else {
+                displayQuestions();
+              }
+            } else {
+              document.getElementById("quizQuestions").innerHTML =
+                "<p>No quiz found for this StudentID.</p>";
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            document.getElementById(
+              "quizQuestions"
+            ).innerHTML = `<p>Error loading quiz. Check console. Error: ${error.message}</p>`;
+          });
+      }
+
+      function displayQuestions() {
+        const quizQuestions = document.getElementById("quizQuestions");
+        quizQuestions.innerHTML = questions
+          .map(
+            (q, index) => `
+          <div class="quiz-question">
+            <div class="quiz-progress">Question ${index + 1} of ${
+              questions.length
+            }</div>
+            <p><strong>${index + 1}. ${
+              q.question.trim() || "Sample Question"
+            }</strong></p>
+            <div class="quiz-options">
+              ${q.options
+                .map(
+                  (opt) => `
+                <label><input type="radio" name="q${index}" value="${
+                    opt.trim() || "N/A"
+                  }">${opt.trim() || "N/A"}</label><br>
+              `
+                )
+                .join("")}
+            </div>
+          </div>
+        `
+          )
+          .join("");
+      }
+
+      function submitQuiz() {
+        let score = 0;
+        const feedback = [];
+        questions.forEach((q, index) => {
+          const selected = document.querySelector(
+            `input[name="q${index}"]:checked`
+          );
+          if (selected && selected.value.trim() === q.correctAnswer.trim()) {
+            score++;
+            feedback.push(
+              `Q${index + 1}: Correct (Answer: ${q.correctAnswer})`
+            );
+          } else {
+            feedback.push(`Q${index + 1}: Wrong (Correct: ${q.correctAnswer})`);
+          }
+        });
+
+        document.getElementById("score").innerHTML = `
+          <strong>Your Score: ${score} out of ${questions.length}</strong><br>
+          <span style="color: #555;">Feedback: ${feedback.join("<br>")}</span>
+        `;
+        document.getElementById("submitQuiz").disabled = true;
+
+        if (data.records && data.records[0] && data.records[0].id) {
+          fetch(`${endpointUrl}/${data.records[0].id}`, {
+            method: "PATCH",
+            headers: {
+              Authorization: `Bearer ${airtableApiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              fields: { Score: score },
+            }),
+          })
+            .then((response) => {
+              if (!response.ok)
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              return response.json();
+            })
+            .then(() => console.log("Score updated successfully"))
+            .catch((error) => console.error("Error updating score:", error));
+        } else {
+          console.error("No record ID available to update score.");
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const homeBtn = document.getElementById("homeBtn");
+        const mobileMenuIcon = document.querySelector(".mobile-menu-icon");
+        const sidebar = document.querySelector(".sidebar");
+
+        if (homeBtn) {
+          homeBtn.addEventListener("click", () => {
+            window.location.href = "Debrilliant.html";
+          });
+        }
+
+        if (mobileMenuIcon) {
+          mobileMenuIcon.addEventListener("click", () => {
+            sidebar.classList.toggle("sidebar-open");
+          });
+        }
+
+        const navLinks = document.querySelectorAll(
+          ".sidebar a, .sidebar .nav-item"
+        );
+        navLinks.forEach((link) => {
+          link.addEventListener("click", (event) => {
+            if (link.id !== "homeBtn") {
+              if (window.innerWidth <= 768) {
+                sidebar.classList.remove("sidebar-open");
+              }
+            }
+          });
+        });
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

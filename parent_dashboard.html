@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="The Brilliant Digital Hub - Empowering De-Brilliant House Academy with digital learning and communication"
+    />
+    <meta name="author" content="Student Devs" />
+    <title>The Brilliant Digital Hub - Parent Portal</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Helvetica", sans-serif;
+        background: #f4f7f6;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+      }
+      .sidebar {
+        width: 70px;
+        background: linear-gradient(180deg, #27ae60, #2ecc71);
+        color: #ffffff;
+        position: fixed;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        transition: width 0.3s ease, transform 0.3s ease;
+        z-index: 1000;
+      }
+      .sidebar:hover {
+        width: 200px;
+      }
+      .sidebar.sidebar-open {
+        width: 200px;
+      }
+      .sidebar .logo {
+        max-width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 30px;
+        transition: max-width 0.3s ease, height 0.3s ease;
+      }
+      .sidebar:hover .logo,
+      .sidebar.sidebar-open .logo {
+        max-width: 100px;
+        height: 100px;
+      }
+      .nav-item {
+        width: 100%;
+        padding: 15px 0;
+        text-align: center;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        color: #ffffff;
+        text-decoration: none;
+        display: block;
+      }
+      .nav-item:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-item i {
+        transition: transform 0.3s ease;
+      }
+      .nav-item:hover i,
+      .nav-item:active i {
+        animation: pulse 0.5s ease-out;
+      }
+      @media (hover: none) {
+        .nav-item:active i {
+          animation: pulse 0.5s ease-out;
+        }
+      }
+      .sidebar:hover .nav-item span,
+      .sidebar.sidebar-open .nav-item span {
+        display: inline;
+      }
+      .nav-item span {
+        display: none;
+        vertical-align: middle;
+        margin-left: 10px;
+      }
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      .main-content {
+        margin-left: 70px;
+        flex-grow: 1;
+        padding: 20px;
+        transition: margin-left 0.3s ease;
+      }
+      .sidebar:hover ~ .main-content,
+      .sidebar.sidebar-open ~ .main-content {
+        margin-left: 200px;
+      }
+      .hero {
+        height: 400px;
+        background: url("https://media.gettyimages.com/id/1397105932/photo/little-children-bonding-with-parents-on-sofa-at-home-and-using-tablet.jpg?s=2048x2048&w=gi&k=20&c=4RaIQj-9jeMjxPTRGYLE3q3FINSV_l5b9fiOMcjDwrU=")
+          no-repeat center center;
+        background-size: cover;
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(39, 174, 96, 0.6);
+        z-index: 1;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: #ffffff;
+        padding: 20px;
+      }
+      .hero-content h1 {
+        font-size: 3em;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      .hero-content p {
+        font-size: 1.2em;
+        margin-bottom: 20px;
+      }
+      .hero .btn {
+        background: #ffffff;
+        color: #27ae60;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: 600;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .hero .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+      .academy-name {
+        position: absolute;
+        z-index: 2;
+        font-size: 1.8em;
+        font-weight: 700;
+        color: #ffffff;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        padding: 10px 20px;
+        background: rgba(39, 174, 95, 0.315);
+        border-radius: 10px 0 0 10px;
+        right: 0;
+        top: 10px;
+        width: 300px;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .academy-name span {
+        display: inline-block;
+        animation: slideRightToLeft 20s linear infinite;
+      }
+      @keyframes slideRightToLeft {
+        0% {
+          transform: translateX(100%);
+        }
+        100% {
+          transform: translateX(-100%);
+        }
+      }
+      .login-page {
+        display: none;
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        border-left: 4px solid #27ae60;
+      }
+      .login-page.active {
+        display: block;
+      }
+      .login-page h2 {
+        color: #27ae60;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+        border-bottom: 2px solid #27ae60;
+        padding-bottom: 5px;
+      }
+      .login-form input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1em;
+        transition: border-color 0.3s ease;
+      }
+      .login-form input:focus {
+        border-color: #27ae60;
+        outline: none;
+      }
+      .login-form button {
+        background: #27ae60;
+        color: #ffffff;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+      .login-form button:hover {
+        background: #219653;
+      }
+      .dashboard {
+        display: none;
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        border-left: 4px solid #27ae60;
+      }
+      .dashboard.active {
+        display: block;
+      }
+      .dashboard h2 {
+        color: #27ae60;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+        border-bottom: 2px solid #27ae60;
+        padding-bottom: 8px;
+      }
+      .dashboard .report {
+        background: #f9f9f9;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .dashboard .report:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .dashboard .report p {
+        margin: 8px 0;
+        font-size: 1em;
+        line-height: 1.5;
+      }
+      .dashboard .report p strong {
+        color: #333;
+        font-weight: 600;
+      }
+      .dashboard .feedback-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+      }
+      .dashboard .feedback-btn {
+        background: #ff4444;
+        color: #ffffff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9em;
+        font-weight: 500;
+        transition: background 0.3s ease, transform 0.3s ease;
+      }
+      .dashboard .feedback-btn:hover {
+        background: #cc0000;
+        transform: translateY(-2px);
+      }
+      .dashboard .whatsapp-btn {
+        background: #25d366;
+        color: #ffffff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9em;
+        font-weight: 500;
+        transition: background 0.3s ease, transform 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .dashboard .whatsapp-btn:hover {
+        background: #20b358;
+        transform: translateY(-2px);
+      }
+      .dashboard .whatsapp-btn i {
+        font-size: 1em;
+      }
+      .mobile-menu-icon {
+        display: none;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        font-size: 24px;
+        color: #27ae60;
+        cursor: pointer;
+        z-index: 1001;
+        transition: transform 0.3s ease;
+      }
+      footer {
+        text-align: center;
+        padding: 15px;
+        background: #27ae60;
+        color: #ffffff;
+        width: 100%;
+        margin-top: auto;
+      }
+      footer p {
+        margin: 0;
+        font-size: 0.9em;
+      }
+      @media (max-width: 768px) {
+        .mobile-menu-icon {
+          display: block;
+        }
+        .sidebar {
+          width: 200px;
+          transform: translateX(-200px);
+        }
+        .sidebar.sidebar-open {
+          transform: translateX(0);
+        }
+        .sidebar:hover {
+          width: 200px;
+        }
+        .sidebar:hover .logo {
+          max-width: 50px;
+          height: 50px;
+        }
+        .sidebar:hover .nav-item span {
+          display: none;
+        }
+        .sidebar:hover ~ .main-content {
+          margin-left: 0;
+        }
+        .main-content {
+          margin-left: 0;
+          margin-right: 0;
+          padding: 15px;
+        }
+        .sidebar.sidebar-open ~ .main-content .mobile-menu-icon {
+          transform: translateX(200px);
+        }
+        .hero {
+          height: 250px;
+        }
+        .hero-content h1 {
+          font-size: 1.8em;
+        }
+        .hero-content p {
+          font-size: 0.9em;
+        }
+        .hero .btn {
+          padding: 8px 16px;
+          font-size: 0.9em;
+        }
+        .academy-name {
+          font-size: 1.2em;
+          top: 5px;
+          right: 5px;
+          width: 200px;
+          padding: 10px 20px;
+        }
+        .login-page {
+          padding: 15px;
+        }
+        .login-page h2 {
+          font-size: 1.4em;
+        }
+        .login-form input {
+          padding: 10px;
+          font-size: 0.9em;
+        }
+        .login-form button {
+          padding: 10px 20px;
+          font-size: 0.9em;
+        }
+        .dashboard {
+          padding: 15px;
+        }
+        .dashboard h2 {
+          font-size: 1.4em;
+          padding-bottom: 5px;
+        }
+        .dashboard .report {
+          padding: 15px;
+          margin-bottom: 15px;
+        }
+        .dashboard .report p {
+          font-size: 0.9em;
+          line-height: 1.4;
+        }
+        .dashboard .feedback-buttons {
+          flex-direction: column;
+          gap: 8px;
+        }
+        .dashboard .feedback-btn,
+        .dashboard .whatsapp-btn {
+          padding: 8px 12px;
+          font-size: 0.85em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <img
+        src="debrilliantlogo.jpg"
+        alt="The Brilliant Digital Hub Logo"
+        class="logo"
+      />
+      <div class="nav-item" id="homeBtn">
+        <i class="fas fa-home"></i><span>Home</span>
+      </div>
+      <a href="parent_dashboard.html" class="nav-item">
+        <i class="fas fa-users"></i><span>Parent Portal</span>
+      </a>
+      <a href="quizzes.html" class="nav-item">
+        <i class="fas fa-pencil-alt"></i><span>Quizzes</span>
+      </a>
+      <a href="homework.html" class="nav-item">
+        <i class="fas fa-book"></i><span>Homework</span>
+      </a>
+    </div>
+
+    <div class="main-content">
+      <div class="mobile-menu-icon">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="hero">
+        <div class="hero-content">
+          <h1>De-Brilliant Parent Portal</h1>
+          <p>Transforming De-Brilliant House Academy with Digital Excellence</p>
+          <button class="btn" onclick="showLogin()">
+            Access Parent Portal
+          </button>
+        </div>
+        <div class="academy-name">
+          <span>De-Brilliant House Academy</span>
+        </div>
+      </div>
+
+      <div class="login-page">
+        <h2>Parent Login</h2>
+        <div class="login-form">
+          <input type="text" id="parentId" placeholder="Enter Your Parent ID" />
+          <button onclick="login()">Login</button>
+        </div>
+      </div>
+
+      <div class="dashboard">
+        <h2>Your Child's Updates</h2>
+        <div class="report" id="report1"></div>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2025 De-Brilliant Digital Hub | Developed by Student Devs</p>
+    </footer>
+
+    <script>
+      function showLogin() {
+        document.querySelector(".login-page").classList.add("active");
+        document.querySelector(".hero").style.display = "none";
+      }
+
+      function login() {
+        const parentId = document.getElementById("parentId").value.trim();
+        if (!parentId) {
+          alert("Please enter a Parent ID.");
+          return;
+        }
+        fetchReports(parentId);
+        document.querySelector(".login-page").classList.remove("active");
+        document.querySelector(".dashboard").classList.add("active");
+      }
+
+      function sendFeedback(reportId) {
+        window.location.href = `mailto:school@example.com?subject=Feedback for Report ${reportId}&body=Enter your feedback here`;
+      }
+
+      function sendWhatsAppFeedback(parentId, reportId) {
+        const message = encodeURIComponent(
+          `Feedback for Report ${reportId} from Parent ${parentId}: `
+        );
+        window.location.href = `https://wa.me/+2341234567890?text=${message}`;
+      }
+
+      const airtableApiKey =
+        "patBHgyIy8h3Z5bPP.38c3f9e0bca957f965d1b9b56b82f1fd40a0fc8da771e23f57d0dd4ee2d8d92b";
+      const baseId = "appav5ucs5VASZA2F";
+      const endpointUrl = `https://api.airtable.com/v0/${baseId}/Reports`;
+
+      function fetchReports(parentId) {
+        const url = `${endpointUrl}?filterByFormula=ParentID='${parentId}'`;
+        console.log("Fetching from:", url);
+        fetch(url, {
+          headers: { Authorization: `Bearer ${airtableApiKey}` },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            const reportsContainer = document.getElementById("report1");
+            if (data.records && data.records.length > 0) {
+              reportsContainer.innerHTML = data.records
+                .map(
+                  (record) => `
+                <div class="report">
+                  <p><strong>Report ID:</strong> ${
+                    record.fields.ReportID || "N/A"
+                  }</p>
+                  <p><strong>Message Content:</strong> ${
+                    record.fields["Message Content"] || "No message"
+                  }</p>
+                  <p><strong>Parent Name:</strong> ${
+                    record.fields["Parent Name"] || "N/A"
+                  }</p>
+                  <p><strong>Email:</strong> ${record.fields.Email || "N/A"}</p>
+                  <p><strong>Child Name:</strong> ${
+                    record.fields["Child Name"] || "N/A"
+                  }</p>
+                  <p><strong>Tutor Name:</strong> ${
+                    record.fields.TutorName || "N/A"
+                  }</p>
+                  <div class="feedback-buttons">
+                    <button class="feedback-btn" onclick="sendFeedback('${
+                      record.fields.ReportID || "N/A"
+                    }')">Give Feedback (Email)</button>
+                    <button class="whatsapp-btn" onclick="sendWhatsAppFeedback('${parentId}', '${
+                    record.fields.ReportID || "N/A"
+                  }')">
+                      <i class="fab fa-whatsapp"></i> Give Feedback (WhatsApp)
+                    </button>
+                  </div>
+                </div>
+              `
+                )
+                .join("");
+            } else {
+              reportsContainer.innerHTML =
+                "<p>No reports found for this Parent ID.</p>";
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            document.getElementById(
+              "report1"
+            ).innerHTML = `<p>Error loading reports. Check console. Error: ${error.message}</p>`;
+          });
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const homeBtn = document.getElementById("homeBtn");
+        const mobileMenuIcon = document.querySelector(".mobile-menu-icon");
+        const sidebar = document.querySelector(".sidebar");
+
+        if (homeBtn) {
+          homeBtn.addEventListener("click", () => {
+            window.location.href = "Debrilliant.html";
+          });
+        }
+
+        if (mobileMenuIcon) {
+          mobileMenuIcon.addEventListener("click", () => {
+            sidebar.classList.toggle("sidebar-open");
+          });
+        }
+
+        const navLinks = document.querySelectorAll(
+          ".sidebar a, .sidebar .nav-item"
+        );
+        navLinks.forEach((link) => {
+          link.addEventListener("click", (event) => {
+            if (link.id !== "homeBtn") {
+              if (window.innerWidth <= 768) {
+                sidebar.classList.remove("sidebar-open");
+              }
+            }
+          });
+        });
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
